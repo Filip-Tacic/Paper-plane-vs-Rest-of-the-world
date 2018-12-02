@@ -2,7 +2,15 @@
 
 const VELOCITY=4;
 const BUILDING_VELOCITY=1;
-const PLAYER_MOVESPEED=30;
+const PLAYER_MOVESPEED=15;
+let BULLET_SPEED=0;
+
+//VARIABLES
+
+var isPaused=false;
+var score=document.getElementById("score");
+var scoreValue=0;
+
 
 //CANVAS 
 var canvas= document.getElementById("cnv");
@@ -63,14 +71,59 @@ player.src="/assets/vehicles/player.png";
 playerX=0;
 playerY=250;
 
+//BULLET Creation and MOVEMENT
+var bullet=new Image();
+bullet.src="/assets/vehicles/bullet.png"
+bulletX=playerX+player.width/2-20;
+bulletY=playerY+player.height/2;
+
+
+//MOVE PLAYER UP AND DOWN
 document.addEventListener("keydown", move);
 
 function move(btn){
     switch (btn.keyCode) {
-        case 38: playerY-=PLAYER_MOVESPEED;break;
-        case 40: playerY+=PLAYER_MOVESPEED;
+        case 38: 
+            playerY-=PLAYER_MOVESPEED;
+            bulletY-=PLAYER_MOVESPEED;
+            break;
+        case 40: 
+            playerY+=PLAYER_MOVESPEED;
+            bulletY+=PLAYER_MOVESPEED;
+            break;
+
     } 
 }
+
+
+
+//CONTINUE PLAY ON KEY PRESS (for now....)
+document.addEventListener("keydown", continuePlay);
+
+function continuePlay(btn){
+    switch (btn.keyCode) {
+        case 32: isPaused=false; v3X=1200; console.log("continued");
+        
+        
+    } 
+}
+
+
+
+//-------------SHOOTING
+    //if "Z" is pressed bullet_speed becomes 60, so the bullet starts moving
+document.addEventListener("keydown", shoot);
+    
+    function shoot(btn){
+        switch (btn.keyCode) {
+            case 90: 
+            BULLET_SPEED=60;
+            console.log("shooting");
+            
+        } 
+    }
+
+
 
 //-------------------------------FUNCTIONS----------------------------------------//
 
@@ -110,7 +163,9 @@ function game(){
     v1X-=VELOCITY;
     if(v1X+v1.width<20){
         var randomBuildingNumber=Math.floor(Math.random()*10);
+        var randomYposition=Math.floor(Math.random()*250);
         v1.src="/assets/vehicles/vehicle-"+randomBuildingNumber+".png";
+        v1Y=randomYposition;
         v1X=bckg.width;
     }
 
@@ -118,7 +173,9 @@ function game(){
     v2X-=VELOCITY;
     if(v2X+v2.width<20){
         var randomBuildingNumber=Math.floor(Math.random()*10);
+        var randomYposition=Math.floor(Math.random()*250);
         v2.src="/assets/vehicles/vehicle-"+randomBuildingNumber+".png";
+        v2Y=randomYposition;
         v2X=bckg.width;
     }
 
@@ -126,19 +183,49 @@ function game(){
     v3X-=VELOCITY;
     if(v3X+v3.width<20){
         var randomBuildingNumber=Math.floor(Math.random()*10);
+        var randomYposition=Math.floor(Math.random()*250);
         v3.src="/assets/vehicles/vehicle-"+randomBuildingNumber+".png";
-        v3X=bckg.width;
+        v3Y=randomYposition;
         v3X=bckg.width;
     }
     
 
+    //DRAWING THE BULLET
+    //if the bullet reaches the end of the canvas to the right, it resets its position to starting
+    context.drawImage(bullet, bulletX, bulletY);
+    bulletX+=BULLET_SPEED;
+    if(bulletX>canvas.width){
+        bulletX=playerX+player.width/2-20;
+        BULLET_SPEED=0;
+    }
+    
+    
+    //DRAWING THE PLANE/PLAYER
     context.drawImage(player, playerX, playerY);
 
 
 
+    //SCORE COUNTER
+    scoreValue+=1;
+    
+    score.innerHTML=scoreValue;
+    console.log(scoreValue);
 
 
-    requestAnimationFrame(game);
+    //REPLACE 0 W/ CONDITION WHEN TO PAUSE
+    if(0){
+        console.log("PAUSED");
+        isPaused=true;
+    }
+
+    if (!isPaused){
+        requestAnimationFrame(game);  
+    }
+    
+
+
+
+   
 }
 
 game();
