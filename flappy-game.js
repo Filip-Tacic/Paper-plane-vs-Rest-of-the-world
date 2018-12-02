@@ -5,7 +5,13 @@ const BUILDING_VELOCITY=1;
 const PLAYER_MOVESPEED=15;
 let BULLET_SPEED=0;
 
+//VARIABLES
+
 var isPaused=false;
+var score=document.getElementById("score");
+var scoreValue=0;
+
+
 //CANVAS 
 var canvas= document.getElementById("cnv");
 var context=canvas.getContext("2d");
@@ -157,7 +163,9 @@ function game(){
     v1X-=VELOCITY;
     if(v1X+v1.width<20){
         var randomBuildingNumber=Math.floor(Math.random()*10);
+        var randomYposition=Math.floor(Math.random()*250);
         v1.src="/assets/vehicles/vehicle-"+randomBuildingNumber+".png";
+        v1Y=randomYposition;
         v1X=bckg.width;
     }
 
@@ -165,7 +173,9 @@ function game(){
     v2X-=VELOCITY;
     if(v2X+v2.width<20){
         var randomBuildingNumber=Math.floor(Math.random()*10);
+        var randomYposition=Math.floor(Math.random()*250);
         v2.src="/assets/vehicles/vehicle-"+randomBuildingNumber+".png";
+        v2Y=randomYposition;
         v2X=bckg.width;
     }
 
@@ -173,9 +183,10 @@ function game(){
     v3X-=VELOCITY;
     if(v3X+v3.width<20){
         var randomBuildingNumber=Math.floor(Math.random()*10);
+        var randomYposition=Math.floor(Math.random()*250);
         v3.src="/assets/vehicles/vehicle-"+randomBuildingNumber+".png";
+        v3Y=randomYposition;
         v3X=bckg.width;
-        
     }
     
 
@@ -192,6 +203,13 @@ function game(){
     //DRAWING THE PLANE/PLAYER
     context.drawImage(player, playerX, playerY);
 
+
+
+    //SCORE COUNTER
+    scoreValue+=1;
+    
+    score.innerHTML=scoreValue;
+    console.log(scoreValue);
 
 
     //REPLACE 0 W/ CONDITION WHEN TO PAUSE
