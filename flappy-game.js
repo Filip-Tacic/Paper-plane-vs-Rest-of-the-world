@@ -123,9 +123,25 @@ document.addEventListener("keydown", shoot);
         } 
     }
 
+//------------COLISION DETECTION 
+
+function colisionDetection(a,aX, aY, b, bX, bY){
+
+    if (aX+a.width > bX){
+        if(aY+a.height>bY){
+            if(aY+a.height<bY+b.height){
+                return true;
+            }
+        }
+    } 
+}
 
 
-//-------------------------------FUNCTIONS----------------------------------------//
+
+
+
+
+//-------------------------------FUNCTIONS IN GAME----------------------------------------//
 
 
 
@@ -161,32 +177,41 @@ function game(){
 
     context.drawImage(v1, v1X, v1Y);
     v1X-=VELOCITY;
-    if(v1X+v1.width<20){
+    if(v1X+v1.width<20 || colisionDetection(bullet, bulletX, bulletY, v1, v1X, v1Y)){
         var randomBuildingNumber=Math.floor(Math.random()*10);
         var randomYposition=Math.floor(Math.random()*250);
         v1.src="/assets/vehicles/vehicle-"+randomBuildingNumber+".png";
         v1Y=randomYposition;
         v1X=bckg.width;
+        bulletX=playerX+player.width/2-20;
+        bulletY=playerY+player.height/2;
+        BULLET_SPEED=0;
     }
 
     context.drawImage(v2, v2X, v2Y);
     v2X-=VELOCITY;
-    if(v2X+v2.width<20){
+    if(v2X+v2.width<20 || colisionDetection(bullet, bulletX, bulletY, v2, v2X, v2Y)){
         var randomBuildingNumber=Math.floor(Math.random()*10);
         var randomYposition=Math.floor(Math.random()*250);
         v2.src="/assets/vehicles/vehicle-"+randomBuildingNumber+".png";
         v2Y=randomYposition;
         v2X=bckg.width;
+        bulletX=playerX+player.width/2-20;
+        bulletY=playerY+player.height/2;
+        BULLET_SPEED=0;
     }
 
     context.drawImage(v3, v3X, v3Y);
     v3X-=VELOCITY;
-    if(v3X+v3.width<20){
+    if(v3X+v3.width<20 || colisionDetection(bullet, bulletX, bulletY, v3, v3X, v3Y)){
         var randomBuildingNumber=Math.floor(Math.random()*10);
         var randomYposition=Math.floor(Math.random()*250);
         v3.src="/assets/vehicles/vehicle-"+randomBuildingNumber+".png";
         v3Y=randomYposition;
         v3X=bckg.width;
+        bulletX=playerX+player.width/2-20;
+        bulletY=playerY+player.height/2;
+        BULLET_SPEED=0;
     }
     
 
@@ -195,6 +220,7 @@ function game(){
     context.drawImage(bullet, bulletX, bulletY);
     bulletX+=BULLET_SPEED;
     if(bulletX>canvas.width){
+
         bulletX=playerX+player.width/2-20;
         BULLET_SPEED=0;
     }
@@ -203,23 +229,23 @@ function game(){
     //DRAWING THE PLANE/PLAYER
     context.drawImage(player, playerX, playerY);
 
-
+    colisionDetection(bullet, bulletX, bulletY, v1, v1X, v1Y);
 
     //SCORE COUNTER
     scoreValue+=1;
-    
     score.innerHTML=scoreValue;
-    console.log(scoreValue);
-
 
     //REPLACE 0 W/ CONDITION WHEN TO PAUSE
-    if(0){
-        console.log("PAUSED");
-        isPaused=true;
-    }
+        // if(0){
+        //     console.log("PAUSED");
+        //     isPaused=true;
+        // }
+
+    
+    requestAnimationFrame(game);  
+
 
     if (!isPaused){
-        requestAnimationFrame(game);  
     }
     
 
